@@ -65,7 +65,7 @@ def draw_grid():
         pygame.draw.line(screen, GRAY, (0, y), (width, y), 1)
 
 def game_over(font, size, color):
-    """Display game over screen with enhanced visuals"""
+
     global done
     overlay = pygame.Surface((width, height))
     overlay.fill((0, 0, 0))

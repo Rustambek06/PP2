@@ -213,125 +213,6 @@ def draw_main_icons(screen):
     pygame.draw.rect(screen, pink, (dis_width - 70, icon_pink_color_start_y, icon_color_shape_width, icon_color_shape_height))
     pygame.draw.rect(screen, gray, (dis_width - 70, icon_gray_color_start_y, icon_color_shape_width, icon_color_shape_height))
 
-def main():
-    pygame.init()
-    screen = pygame.display.set_mode(main_screen_size)
-    clock = pygame.time.Clock()
-
-    # Initialize variables
-    mode = 'blue'
-    is_rectangle_drawer = False
-    is_circle_drawer = False
-    is_triangle_drawer = False
-    is_rhombus_drawer = False
-    is_eraser = False
-    is_right_tri_drawer = False  # New right triangle drawer flag
-    is_equil_tri_drawer = False  # New equilateral triangle drawer flag
-    color = black
-    position = (0, 0)
-
-    while True:
-        pressed = pygame.key.get_pressed()
-        alt_held = pressed[pygame.K_LALT] or pressed[pygame.K_RALT]
-        ctrl_held = pressed[pygame.K_LCTRL] or pressed[pygame.K_RCTRL]
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w and ctrl_held:
-                    return
-                if event.key == pygame.K_F4 and alt_held:
-                    return
-                if event.key == pygame.K_ESCAPE:
-                    return
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    # Existing tool selections
-                    if position[0] <= icon_rectangle_end_x and position[0] > 0 and position[1] < icon_top_bar_height:
-                        is_rectangle_drawer = not is_rectangle_drawer
-                        is_circle_drawer = is_triangle_drawer = is_rhombus_drawer = is_eraser = is_right_tri_drawer = is_equil_tri_drawer = False
-                        print('is_rectangle_drawer = True')
-                    elif position[0] <= icon_circle_end_x and position[0] > icon_circle_start_x and position[1] < icon_top_bar_height:
-                        is_circle_drawer = not is_circle_drawer
-                        is_rectangle_drawer = is_triangle_drawer = is_rhombus_drawer = is_eraser = is_right_tri_drawer = is_equil_tri_drawer = False
-                        print('is_circle_drawer = True')
-                    elif position[0] <= icon_triangle_end_x and position[0] > icon_triangle_start_x and position[1] < icon_top_bar_height:
-                        is_triangle_drawer = not is_triangle_drawer
-                        is_rectangle_drawer = is_circle_drawer = is_rhombus_drawer = is_eraser = is_right_tri_drawer = is_equil_tri_drawer = False
-                        print('is_triangle_drawer = True')
-                    elif position[0] <= icon_rhombus_end_x and position[0] > icon_rhombus_start_x and position[1] < icon_top_bar_height:
-                        is_rhombus_drawer = not is_rhombus_drawer
-                        is_rectangle_drawer = is_circle_drawer = is_triangle_drawer = is_eraser = is_right_tri_drawer = is_equil_tri_drawer = False
-                        print('is_rhombus_drawer = True')
-                    elif position[0] <= icon_eraser_end_x and position[0] > icon_eraser_start_x and position[1] < icon_top_bar_height:
-                        is_eraser = not is_eraser
-                        is_rectangle_drawer = is_circle_drawer = is_triangle_drawer = is_rhombus_drawer = is_right_tri_drawer = is_equil_tri_drawer = False
-                        print('is_eraser = True')
-                    # New tool selections
-                    elif position[0] <= icon_right_tri_end_x and position[0] > icon_right_tri_start_x and position[1] < icon_top_bar_height:
-                        is_right_tri_drawer = not is_right_tri_drawer
-                        is_rectangle_drawer = is_circle_drawer = is_triangle_drawer = is_rhombus_drawer = is_eraser = is_equil_tri_drawer = False
-                        print('is_right_tri_drawer = True')
-                    elif position[0] <= icon_equil_tri_end_x and position[0] > icon_equil_tri_start_x and position[1] < icon_top_bar_height:
-                        is_equil_tri_drawer = not is_equil_tri_drawer
-                        is_rectangle_drawer = is_circle_drawer = is_triangle_drawer = is_rhombus_drawer = is_eraser = is_right_tri_drawer = False
-                        print('is_equil_tri_drawer = True')
-                    
-                    # Color selections
-                    elif position[0] >= dis_width - 70 and position[0] < dis_width - 70 + icon_color_shape_width:
-                        if position[1] > icon_red_color_start_y and position[1] < icon_red_color_end_y:
-                            color = red
-                            print('color = red')
-                        elif position[1] > icon_black_color_start_y and position[1] < icon_black_color_end_y:
-                            color = black
-                            print('color = black')
-                        elif position[1] > icon_blue_color_start_y and position[1] < icon_blue_color_end_y:
-                            color = blue
-                            print('color = blue')
-                        elif position[1] > icon_green_color_start_y and position[1] < icon_green_color_end_y:
-                            color = green
-                            print('color = green')
-                        elif position[1] > icon_yellow_color_start_y and position[1] < icon_yellow_color_end_y:
-                            color = yellow
-                            print('color = yellow')
-                        elif position[1] > icon_purple_color_start_y and position[1] < icon_purple_color_end_y:
-                            color = purple
-                            print('color = purple')
-                        elif position[1] > icon_pink_color_start_y and position[1] < icon_pink_color_end_y:
-                            color = pink
-                            print('color = pink')
-                        elif position[1] > icon_gray_color_start_y and position[1] < icon_gray_color_end_y:
-                            color = gray
-                            print('color = gray')
-                    
-                    # Draw selected shape
-                    elif is_rectangle_drawer:
-                        add_element_rectangle(position[0], position[1], color)
-                    elif is_circle_drawer:
-                        add_element_circle(position[0], position[1], color, 20)
-                    elif is_triangle_drawer:
-                        add_element_triangle(position[0], position[1], color)
-                    elif is_rhombus_drawer:
-                        add_element_rhombus(position[0], position[1], color)
-                    elif is_right_tri_drawer:
-                        add_element_right_triangle(position[0], position[1], color)
-                    elif is_equil_tri_drawer:
-                        add_element_equilateral_triangle(position[0], position[1], color)
-                    elif is_eraser:
-                        erase_element(position[0], position[1])
-
-            if event.type == pygame.MOUSEMOTION:
-                position = event.pos
-                print(position)
-
-        screen.fill((255, 255, 255))
-        draw_all_shapes(screen)
-        draw_main_icons(screen)
-        pygame.display.flip()
-        clock.tick(60)
-
 def drawLineBetween(screen, index, start, end, width, color_mode):
     # Function to draw gradient lines (unchanged)
     c1 = max(0, min(255, 2 * index - 256))
@@ -361,5 +242,174 @@ def drawLineBetween(screen, index, start, end, width, color_mode):
         x = int(aprogress * start[0] + progress * end[0])
         y = int(aprogress * start[1] + progress * end[1])
         pygame.draw.circle(screen, color, (x, y), width)
+
+def main():
+    pygame.init()
+    screen = pygame.display.set_mode(main_screen_size)
+    clock = pygame.time.Clock()
+
+    # Initialize variables
+    is_rectangle_drawer = False
+    is_circle_drawer = False
+    is_triangle_drawer = False
+    is_rhombus_drawer = False
+    is_eraser = False
+    is_right_tri_drawer = False
+    is_equil_tri_drawer = False
+    color = black
+    drawing = False
+    start_pos = (0, 0)
+    end_pos = (0, 0)
+
+    while True:
+        pressed = pygame.key.get_pressed()
+        alt_held = pressed[pygame.K_LALT] or pressed[pygame.K_RALT]
+        ctrl_held = pressed[pygame.K_LCTRL] or pressed[pygame.K_RCTRL]
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_w and ctrl_held:
+                    return
+                if event.key == pygame.K_F4 and alt_held:
+                    return
+                if event.key == pygame.K_ESCAPE:
+                    return
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    position = event.pos
+                    # Tool selections
+                    if position[1] < icon_top_bar_height:
+                        if position[0] <= icon_rectangle_end_x and position[0] > 0:
+                            is_rectangle_drawer = not is_rectangle_drawer
+                            is_circle_drawer = is_triangle_drawer = is_rhombus_drawer = is_eraser = is_right_tri_drawer = is_equil_tri_drawer = False
+                        elif position[0] <= icon_circle_end_x and position[0] > icon_circle_start_x:
+                            is_circle_drawer = not is_circle_drawer
+                            is_rectangle_drawer = is_triangle_drawer = is_rhombus_drawer = is_eraser = is_right_tri_drawer = is_equil_tri_drawer = False
+                        elif position[0] <= icon_triangle_end_x and position[0] > icon_triangle_start_x:
+                            is_triangle_drawer = not is_triangle_drawer
+                            is_rectangle_drawer = is_circle_drawer = is_rhombus_drawer = is_eraser = is_right_tri_drawer = is_equil_tri_drawer = False
+                        elif position[0] <= icon_rhombus_end_x and position[0] > icon_rhombus_start_x:
+                            is_rhombus_drawer = not is_rhombus_drawer
+                            is_rectangle_drawer = is_circle_drawer = is_triangle_drawer = is_eraser = is_right_tri_drawer = is_equil_tri_drawer = False
+                        elif position[0] <= icon_eraser_end_x and position[0] > icon_eraser_start_x:
+                            is_eraser = not is_eraser
+                            is_rectangle_drawer = is_circle_drawer = is_triangle_drawer = is_rhombus_drawer = is_right_tri_drawer = is_equil_tri_drawer = False
+                        elif position[0] <= icon_right_tri_end_x and position[0] > icon_right_tri_start_x:
+                            is_right_tri_drawer = not is_right_tri_drawer
+                            is_rectangle_drawer = is_circle_drawer = is_triangle_drawer = is_rhombus_drawer = is_eraser = is_equil_tri_drawer = False
+                        elif position[0] <= icon_equil_tri_end_x and position[0] > icon_equil_tri_start_x:
+                            is_equil_tri_drawer = not is_equil_tri_drawer
+                            is_rectangle_drawer = is_circle_drawer = is_triangle_drawer = is_rhombus_drawer = is_eraser = is_right_tri_drawer = False
+                    # Color selections
+                    elif position[0] >= dis_width - 70 and position[0] < dis_width - 70 + icon_color_shape_width:
+                        if position[1] > icon_red_color_start_y and position[1] < icon_red_color_end_y:
+                            color = red
+                        elif position[1] > icon_black_color_start_y and position[1] < icon_black_color_end_y:
+                            color = black
+                        elif position[1] > icon_blue_color_start_y and position[1] < icon_blue_color_end_y:
+                            color = blue
+                        elif position[1] > icon_green_color_start_y and position[1] < icon_green_color_end_y:
+                            color = green
+                        elif position[1] > icon_yellow_color_start_y and position[1] < icon_yellow_color_end_y:
+                            color = yellow
+                        elif position[1] > icon_purple_color_start_y and position[1] < icon_purple_color_end_y:
+                            color = purple
+                        elif position[1] > icon_pink_color_start_y and position[1] < icon_pink_color_end_y:
+                            color = pink
+                        elif position[1] > icon_gray_color_start_y and position[1] < icon_gray_color_end_y:
+                            color = gray
+                    # Start drawing
+                    elif any([is_rectangle_drawer, is_circle_drawer, is_triangle_drawer, 
+                             is_rhombus_drawer, is_right_tri_drawer, is_equil_tri_drawer]):
+                        drawing = True
+                        start_pos = position
+                        end_pos = position
+                    elif is_eraser:
+                        erase_element(position[0], position[1])
+
+            if event.type == pygame.MOUSEMOTION:
+                if drawing:
+                    end_pos = event.pos
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1 and drawing:
+                    drawing = False
+                    # Calculate dimensions
+                    width = abs(end_pos[0] - start_pos[0])
+                    height = abs(end_pos[1] - start_pos[1])
+                    x = min(start_pos[0], end_pos[0])
+                    y = min(start_pos[1], end_pos[1])
+                    
+                    # Draw final shape
+                    if is_rectangle_drawer:
+                        elements_to_draw.append({'shape': SQUARE, 'x': x, 'y': y, 'color': color, 'width': width, 'height': height})
+                    elif is_circle_drawer:
+                        radius = max(width, height) // 2
+                        center_x = x + width // 2
+                        center_y = y + height // 2
+                        add_element_circle(center_x, center_y, color, radius)
+                    elif is_triangle_drawer:
+                        elements_to_draw.append({'shape': TRIANGLE, 'x': x + width//2, 'y': y + height//2, 'color': color, 'width': width, 'height': height})
+                    elif is_rhombus_drawer:
+                        elements_to_draw.append({'shape': RHOMBUS, 'x': x + width//2, 'y': y + height//2, 'color': color, 'width': width, 'height': height})
+                    elif is_right_tri_drawer:
+                        elements_to_draw.append({'shape': RIGHT_TRIANGLE, 'x': x, 'y': y, 'color': color, 'width': width, 'height': height})
+                    elif is_equil_tri_drawer:
+                        elements_to_draw.append({'shape': EQUILATERAL_TRIANGLE, 'x': x + width//2, 'y': y + height//2, 'color': color, 'width': width, 'height': height})
+
+        # Drawing
+        screen.fill((255, 255, 255))
+        
+        # Draw preview rectangle while dragging
+        if drawing:
+            preview_x = min(start_pos[0], end_pos[0])
+            preview_y = min(start_pos[1], end_pos[1])
+            preview_width = abs(end_pos[0] - start_pos[0])
+            preview_height = abs(end_pos[1] - start_pos[1])
+            pygame.draw.rect(screen, gray, (preview_x, preview_y, preview_width, preview_height), 1)
+
+        # Update draw_all_shapes function to handle new size parameters
+        for element in elements_to_draw:
+            if element['shape'] == SQUARE:
+                pygame.draw.rect(screen, element['color'], [element['x'], element['y'], 
+                                                          element.get('width', 50), element.get('height', 50)])
+            elif element['shape'] == CIRCLE:
+                pygame.draw.circle(screen, element['color'], (element['x'], element['y']), element['radius'])
+            elif element['shape'] == TRIANGLE:
+                width = element.get('width', 50)
+                height = element.get('height', 50)
+                points = [(element['x'], element['y'] - height/2), 
+                         (element['x'] + width/2, element['y'] + height/2), 
+                         (element['x'] - width/2, element['y'] + height/2)]
+                pygame.draw.polygon(screen, element['color'], points)
+            elif element['shape'] == RHOMBUS:
+                width = element.get('width', 50)
+                height = element.get('height', 50)
+                points = [(element['x'], element['y'] - height/2), 
+                         (element['x'] + width/2, element['y']), 
+                         (element['x'], element['y'] + height/2), 
+                         (element['x'] - width/2, element['y'])]
+                pygame.draw.polygon(screen, element['color'], points)
+            elif element['shape'] == RIGHT_TRIANGLE:
+                width = element.get('width', 50)
+                height = element.get('height', 50)
+                points = [(element['x'], element['y']), 
+                         (element['x'] + width, element['y']), 
+                         (element['x'], element['y'] + height)]
+                pygame.draw.polygon(screen, element['color'], points)
+            elif element['shape'] == EQUILATERAL_TRIANGLE:
+                width = element.get('width', 50)
+                height = element.get('height', 50)
+                points = [(element['x'], element['y'] - height/2), 
+                         (element['x'] + width/2, element['y'] + height/2), 
+                         (element['x'] - width/2, element['y'] + height/2)]
+                pygame.draw.polygon(screen, element['color'], points)
+
+        draw_main_icons(screen)
+        pygame.display.flip()
+        clock.tick(60)
 
 main()
